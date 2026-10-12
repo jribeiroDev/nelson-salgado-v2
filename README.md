@@ -18,6 +18,9 @@ Landing page do personal trainer Nelson Salgado. É um site estático feito com 
 | `npm run preview` | Serve o `dist/` localmente                      |
 | `npm run check`   | Valida os tipos e os schemas dos conteúdos      |
 | `npm run assets`  | Gera de novo os ícones PNG e o `og-image.jpg`   |
+| `npm run cf:dev`  | Serve o `dist/` com o runtime do Cloudflare (testa `_headers`, 404) em `127.0.0.1:8788` |
+| `npm run cf:deploy` | Build + deploy manual com Wrangler (só se não usares a integração Git) |
+| `npm run cf:deploy:preview` | Igual, mas para o URL de pré-visualização `preview.nelson-salgado.pages.dev` |
 
 ## Editar conteúdos
 
@@ -50,20 +53,46 @@ public/                # robots.txt, _headers, ícones, og-image.jpg
 
 ## Deploy no Cloudflare Pages
 
-1. Pôr o repositório no GitHub/GitLab.
-2. Cloudflare → **Workers & Pages → Create → Pages → Connect to Git** e escolher o repositório.
-3. Configuração do build:
-   - Framework preset: **Astro**
-   - Build command: `npm run build`
-   - Build output directory: `dist`
-   - Variável de ambiente: `NODE_VERSION = 22`
-4. **Custom domains**: adicionar `nelson-salgado.pt` e `www.nelson-salgado.pt`.
-5. **Redirect `www` → apex** (domínio canónico): *Rules → Redirect Rules → Create*
+### Deploy automático via Git (recomendado)
+
+O projeto do Pages está ligado ao repositório GitHub `jribeiroDev/nelson-salgado-v2`: **cada push faz build e deploy automaticamente**.
+
+- push para `master` → **produção**
+- push para outro branch / pull request → URL de pré-visualização (`<branch>.nelson-salgado.pages.dev`)
+
+Configuração (feita uma vez em *Workers & Pages → Create → Pages → Connect to Git*):
+
+| Campo | Valor |
+| --- | --- |
+| Production branch | `master` |
+| Framework preset | Astro |
+| Build command | `npm run build` |
+| Build output directory | `dist` |
+| Node | lido de `.node-version` (22) |
+
+O `wrangler.jsonc` define o nome do projeto e a pasta de output; os headers de cache e segurança estão em `public/_headers` (podes validá-los localmente com `npm run cf:dev`).
+
+### Deploy manual com Wrangler (alternativa)
+
+Só para projetos **sem** ligação ao Git (Direct Upload). Atenção: um projeto criado assim não pode depois ser ligado ao Git no painel.
+
+```bash
+npx wrangler login
+```
+
+```bash
+npm run cf:deploy
+```
+
+### Domínio
+
+1. No projeto do Pages → **Custom domains**: adicionar `nelson-salgado.pt` e `www.nelson-salgado.pt` (o DNS do domínio tem de estar na Cloudflare, ou criar os CNAME indicados).
+2. **Redirect `www` → domínio principal** (canónico): *Rules → Redirect Rules → Create*
    - Quando: `Hostname equals www.nelson-salgado.pt`
    - Então: Dynamic redirect `concat("https://nelson-salgado.pt", http.request.uri.path)`, código **301**, manter a query string.
-6. Em *Speed → Optimization*, deixar o **Rocket Loader desligado**: injeta JS e não traz benefício aqui.
+3. Em *Speed → Optimization*, deixar o **Rocket Loader desligado**: injeta JS e não traz benefício aqui.
 
-Os headers de cache e de segurança estão em `public/_headers`. Os ficheiros com hash em `/_astro/*` ficam em cache para sempre e o HTML revalida em cada deploy.
+Os ficheiros com hash em `/_astro/*` (imagens, fonte) ficam em cache para sempre; o HTML revalida em cada deploy, por isso as alterações aparecem logo.
 
 ## Depois de publicar (SEO)
 

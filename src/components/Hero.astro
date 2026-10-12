@@ -14,6 +14,13 @@ const images = [
   { src: hero4, alt: 'Atleta em treino de musculação com halteres' },
 ];
 
+// Com object-cover numa célula alta, a largura desenhada é a altura da célula × proporção
+// da foto. Mobile: grelha 2×2 (célula = 50vw × 50vh); desktop: 4 colunas (25vw × 100vh).
+const sizesFor = ({ width, height }: { width: number; height: number }) => {
+  const ratio = (width / height).toFixed(3);
+  return `(min-width: 640px) max(25vw, calc(100vh * ${ratio})), max(50vw, calc(50vh * ${ratio}))`;
+};
+
 // Destaca as duas últimas palavras do título a dourado ("programa ideal").
 const words = site.hero.title.split(' ');
 const titleStart = words.slice(0, -2).join(' ');
@@ -30,16 +37,12 @@ const titleEnd = words.slice(-2).join(' ');
           src={img.src}
           alt={img.alt}
           formats={['avif', 'webp']}
-          width={480}
-          height={1000}
-          fit="cover"
-          position="attention"
-          widths={[200, 280, 360, 400, 480]}
-          sizes="(min-width: 640px) max(25vw, 48vh), max(50vw, 24vh)"
+          widths={[240, 360, 480, 640, 800].filter((w) => w <= img.src.width)}
+          sizes={sizesFor(img.src)}
           quality={55}
           loading="eager"
           fetchpriority="high"
-          class="h-full w-full object-cover"
+          class="h-full w-full object-cover object-center"
           pictureAttributes={{ class: 'block h-full min-h-0 w-full overflow-hidden' }}
         />
       ))
@@ -53,25 +56,24 @@ const titleEnd = words.slice(-2).join(' ');
 
   <div class="mx-auto flex w-full max-w-5xl flex-col items-center px-4 pt-28 pb-24 text-center sm:px-6 lg:px-8">
     <h1 class="flex flex-col items-center text-white">
-      <span
-        class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-white/90 backdrop-blur-sm sm:text-sm"
-      >
-        <span class="size-2 rounded-full bg-gold shadow-[0_0_0_4px_rgb(201_164_77/0.25)]"></span>
-        {site.hero.eyebrow}
-      </span>
-      <span class="mt-6 block text-[2.6rem] leading-[1.06] font-bold text-balance sm:text-6xl lg:text-7xl">
+      {
+        site.hero.eyebrow && (
+          <span class="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-white/90 backdrop-blur-sm sm:text-sm">
+            <span class="size-2 rounded-full bg-gold shadow-[0_0_0_4px_rgb(201_164_77/0.25)]" />
+            {site.hero.eyebrow}
+          </span>
+        )
+      }
+      <span class="block text-[2.6rem] leading-[1.06] font-bold text-balance sm:text-6xl lg:text-7xl">
         {titleStart} <span class="text-gold">{titleEnd}</span>
       </span>
     </h1>
     <p class="mt-6 max-w-2xl text-lg text-pretty text-white/80 sm:text-xl">{site.hero.subtitle}</p>
 
-    <div class="mt-9 flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row">
-      <a href="#planos" class="btn-gold w-full sm:w-auto">
-        {site.hero.cta}
-        <Icon name="arrow-right" class="size-4" />
-      </a>
-      <a href="#programas" class="btn-ghost w-full sm:w-auto">Ver programas</a>
-    </div>
+    <a href="#planos" class="btn-gold mt-9 animate-bounce px-8 hover:animate-none">
+      {site.hero.cta}
+      <Icon name="arrow-right" class="size-4" />
+    </a>
 
     <ul
       class="mt-12 grid w-full max-w-2xl grid-cols-3 divide-x divide-white/15 rounded-2xl border border-white/15 bg-white/[0.07] py-4 backdrop-blur-md sm:mt-16 sm:py-6"
@@ -91,11 +93,11 @@ const titleEnd = words.slice(-2).join(' ');
 
   <a
     href="#planos"
-    class="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-[0.7rem] font-semibold tracking-[0.2em] text-white/70 uppercase transition hover:text-gold sm:flex"
+    class="absolute bottom-5 left-1/2 flex -translate-x-1/2 animate-bounce flex-col items-center gap-2 text-[0.7rem] font-semibold tracking-[0.2em] text-gold uppercase transition hover:text-white sm:bottom-8"
   >
-    <span>Scroll<span class="sr-only"> até aos planos</span></span>
+    <span class="hidden sm:block">Scroll</span><span class="sr-only"> até aos planos</span>
     <span class="flex h-9 w-5 justify-center rounded-full border-2 border-current pt-1.5">
-      <span class="h-2 w-0.5 animate-bounce rounded-full bg-current"></span>
+      <span class="h-2 w-0.5 animate-pulse rounded-full bg-current"></span>
     </span>
   </a>
 </section>

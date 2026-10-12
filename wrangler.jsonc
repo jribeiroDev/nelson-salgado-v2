@@ -1,0 +1,8 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  // Nome do projeto no Cloudflare Pages (→ nelson-salgado.pages.dev)
+  "name": "nelson-salgado",
+  // Site 100% estático: o Pages só serve o que o `astro build` gera.
+  "pages_build_output_dir": "./dist",
+  "compatibility_date": "2026-10-01"
+}

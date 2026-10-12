@@ -9,7 +9,7 @@
   "instagram": "https://www.instagram.com/elite_salgado",
   "instagramHandle": "@elite_salgado",
   "hero": {
-    "eyebrow": "Personal Trainer Nelson Salgado",
+    "eyebrow": "",
     "title": "Descobre o teu programa ideal",
     "subtitle": "Treino personalizado e acompanhamento 1:1 para transformares o teu corpo e a tua rotina.",
     "cta": "Participe agora"
@@ -19,5 +19,5 @@
     { "value": "24/7", "label": "Acesso total" },
     { "value": "15+", "label": "Modalidades" }
   ],
-  "credit": { "label": "JR Web Solutions" }
+  "credit": { "label": "JRstudio" }
 }
