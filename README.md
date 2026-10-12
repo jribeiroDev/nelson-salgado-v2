@@ -1,6 +1,6 @@
 # nelson-salgado.pt
 
-Landing page do personal trainer Nelson Salgado. É um site estático feito com **Astro 7** e **Tailwind CSS 4**, alojado no **Cloudflare Pages**.
+Landing page do personal trainer Nelson Salgado. É um site estático feito com **Astro 7** e **Tailwind CSS 4**, alojado na **Cloudflare** (Workers com static assets).
 
 - Todo o conteúdo vem no HTML (ótimo para SEO), incluindo os detalhes dos programas, que abrem num `<dialog>` nativo. Não há framework JS: só ~3 KB de scripts inline (diálogo do WhatsApp, header e carrossel).
 - A fonte é a **Plus Jakarta Sans** variável, self-hosted (1 ficheiro de 27 KB com preload). O Astro gera um fallback com métricas ajustadas.
@@ -18,9 +18,9 @@ Landing page do personal trainer Nelson Salgado. É um site estático feito com 
 | `npm run preview` | Serve o `dist/` localmente                      |
 | `npm run check`   | Valida os tipos e os schemas dos conteúdos      |
 | `npm run assets`  | Gera de novo os ícones PNG e o `og-image.jpg`   |
-| `npm run cf:dev`  | Serve o `dist/` com o runtime do Cloudflare (testa `_headers`, 404) em `127.0.0.1:8788` |
-| `npm run cf:deploy` | Build + deploy manual com Wrangler (só se não usares a integração Git) |
-| `npm run cf:deploy:preview` | Igual, mas para o URL de pré-visualização `preview.nelson-salgado.pages.dev` |
+| `npm run cf:dev`  | Serve o `dist/` com o runtime da Cloudflare (testa `_headers`, 404) em `127.0.0.1:8788` |
+| `npm run cf:deploy` | Build + deploy manual para produção com Wrangler |
+| `npm run cf:deploy:preview` | Build + upload de uma versão de pré-visualização (não afeta produção) |
 
 ## Editar conteúdos
 
@@ -51,30 +51,31 @@ src/
 public/                # robots.txt, _headers, ícones, og-image.jpg
 ```
 
-## Deploy no Cloudflare Pages
+## Deploy na Cloudflare (Workers com static assets)
 
-### Deploy automático via Git (recomendado)
+O site é publicado como um **Worker só com ficheiros estáticos** (o modelo que a Cloudflare recomenda para sites novos, sucessor do Pages). Não há código de servidor: o Worker serve o conteúdo de `dist/`.
 
-O projeto do Pages está ligado ao repositório GitHub `jribeiroDev/nelson-salgado-v2`: **cada push faz build e deploy automaticamente**.
+### Deploy automático via Git
 
-- push para `master` → **produção**
-- push para outro branch / pull request → URL de pré-visualização (`<branch>.nelson-salgado.pages.dev`)
+O Worker está ligado ao repositório GitHub `jribeiroDev/nelson-salgado-v2` (Workers Builds): **cada push para `master` faz build e deploy em produção**.
 
-Configuração (feita uma vez em *Workers & Pages → Create → Pages → Connect to Git*):
-
-| Campo | Valor |
+| Campo (painel → Worker → Settings → Build) | Valor |
 | --- | --- |
-| Production branch | `master` |
-| Framework preset | Astro |
+| Branch de produção | `master` |
 | Build command | `npm run build` |
-| Build output directory | `dist` |
+| Deploy command | `npx wrangler deploy` |
 | Node | lido de `.node-version` (22) |
 
-O `wrangler.jsonc` define o nome do projeto e a pasta de output; os headers de cache e segurança estão em `public/_headers` (podes validá-los localmente com `npm run cf:dev`).
+O `wrangler.jsonc` define o Worker:
 
-### Deploy manual com Wrangler (alternativa)
+- `name`: tem de ser **igual ao nome do Worker no painel** (`nelson-salgado-v2`)
+- `assets.directory: ./dist`: a pasta gerada pelo build
+- `not_found_handling: 404-page`: endereços inexistentes mostram `404.html` com status 404
+- `public/_headers`: headers de cache e segurança, aplicados pela Cloudflare
 
-Só para projetos **sem** ligação ao Git (Direct Upload). Atenção: um projeto criado assim não pode depois ser ligado ao Git no painel.
+Para testar localmente com o mesmo runtime: `npm run build && npm run cf:dev` (abre em `http://127.0.0.1:8788`).
+
+### Deploy manual (alternativa)
 
 ```bash
 npx wrangler login
@@ -84,9 +85,11 @@ npx wrangler login
 npm run cf:deploy
 ```
 
+`npm run cf:deploy:preview` publica uma versão de pré-visualização (URL próprio) sem mexer em produção.
+
 ### Domínio
 
-1. No projeto do Pages → **Custom domains**: adicionar `nelson-salgado.pt` e `www.nelson-salgado.pt` (o DNS do domínio tem de estar na Cloudflare, ou criar os CNAME indicados).
+1. No Worker → **Settings → Domains & Routes → Add → Custom domain**: adicionar `nelson-salgado.pt` e `www.nelson-salgado.pt` (o DNS do domínio tem de estar na Cloudflare, ou criar os CNAME indicados).
 2. **Redirect `www` → domínio principal** (canónico): *Rules → Redirect Rules → Create*
    - Quando: `Hostname equals www.nelson-salgado.pt`
    - Então: Dynamic redirect `concat("https://nelson-salgado.pt", http.request.uri.path)`, código **301**, manter a query string.

@@ -10,9 +10,9 @@
     "check": "astro check",
     "astro": "astro",
     "assets": "node scripts/generate-assets.mjs",
-    "cf:dev": "wrangler pages dev",
-    "cf:deploy": "npm run build && wrangler pages deploy",
-    "cf:deploy:preview": "npm run build && wrangler pages deploy --branch=preview"
+    "cf:dev": "wrangler dev --ip 127.0.0.1 --port 8788",
+    "cf:deploy": "npm run build && wrangler deploy",
+    "cf:deploy:preview": "npm run build && wrangler versions upload"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

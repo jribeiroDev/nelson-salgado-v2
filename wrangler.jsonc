@@ -1,8 +1,15 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  // Nome do projeto no Cloudflare Pages (→ nelson-salgado.pages.dev)
-  "name": "nelson-salgado",
-  // Site 100% estático: o Pages só serve o que o `astro build` gera.
-  "pages_build_output_dir": "./dist",
-  "compatibility_date": "2026-10-01"
+  // Tem de ser igual ao nome do Worker no painel da Cloudflare.
+  "name": "nelson-salgado-v2",
+  "compatibility_date": "2026-10-01",
+  // Site 100% estático: Worker só com static assets (sem código de servidor).
+  // O build (`npm run build`) gera ./dist; o `wrangler deploy` publica essa pasta.
+  // Os ficheiros public/_headers e public/_redirects são respeitados.
+  "assets": {
+    "directory": "./dist",
+    // Páginas inexistentes → dist/404.html com status 404.
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  }
 }
