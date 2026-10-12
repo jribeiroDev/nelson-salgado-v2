@@ -64,6 +64,8 @@ const titleEnd = words.slice(-2).join(' ');
           </span>
         )
       }
+      {/* Sem eyebrow visível, o nome e a profissão ficam no <h1> só para Google e leitores de ecrã. */}
+      {!site.hero.eyebrow && <span class="sr-only">{site.jobTitle} {site.name}: </span>}
       <span class="block text-[2.6rem] leading-[1.06] font-bold text-balance sm:text-6xl lg:text-7xl">
         {titleStart} <span class="text-gold">{titleEnd}</span>
       </span>
