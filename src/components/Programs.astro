@@ -109,9 +109,10 @@ const programs = (await getCollection('programs')).sort((a, b) => a.data.order -
           aria-label={`Ir para ${p.name}`}
           aria-controls="programas-carousel"
           aria-current={i === 0 ? 'true' : 'false'}
+          data-visible={i === 0 ? '' : undefined}
           class="group inline-flex h-8 min-w-8 cursor-pointer items-center justify-center"
         >
-          <span class="block h-2.5 w-2.5 rounded-full bg-darkblue/20 transition-all duration-300 group-aria-[current=true]:w-8 group-aria-[current=true]:bg-gold" />
+          <span class="block h-2.5 w-2.5 rounded-full bg-darkblue/20 transition-all duration-300 group-data-visible:w-6 group-data-visible:bg-gold" />
         </button>
       ))
     }
@@ -209,8 +210,10 @@ const programs = (await getCollection('programs')).sort((a, b) => a.data.order -
     });
   }
 
-  // Carrossel: setas + indicadores. O slide ativo vem de um IntersectionObserver
+  // Carrossel: setas + indicadores. Os slides visíveis vêm de um IntersectionObserver
   // (sem ler geometria no arranque → sem layout forçado).
+  const smooth = matchMedia('(prefers-reduced-motion: no-preference)').matches ? 'smooth' : 'instant';
+
   for (const row of document.querySelectorAll<HTMLElement>('.carousel')) {
     const slides = [...row.children] as HTMLElement[];
     const dots = [...document.querySelectorAll<HTMLButtonElement>(`[data-carousel-dots="${row.id}"] button`)];
@@ -218,9 +221,11 @@ const programs = (await getCollection('programs')).sort((a, b) => a.data.order -
     const [prev, next] = nav ? [...nav.querySelectorAll<HTMLButtonElement>('button')] : [];
     const visible = new Set<number>();
 
+    // Alinha o slide `index` ao início do carrossel. Perto do fim o browser limita ao
+    // scroll máximo, o que mostra os últimos slides por inteiro.
     const goTo = (index: number) => {
       const slide = slides[Math.max(0, Math.min(index, slides.length - 1))];
-      row.scrollTo({ left: slide.offsetLeft - parseFloat(getComputedStyle(row).paddingLeft) });
+      row.scrollTo({ left: slide.offsetLeft - slides[0].offsetLeft, behavior: smooth as ScrollBehavior });
     };
 
     const observer = new IntersectionObserver(
@@ -233,7 +238,11 @@ const programs = (await getCollection('programs')).sort((a, b) => a.data.order -
         if (!visible.size) return;
         const first = Math.min(...visible);
         const last = Math.max(...visible);
-        dots.forEach((dot, i) => dot.setAttribute('aria-current', String(i === first)));
+        // Destaca todos os slides visíveis (no desktop cabem 3–4), para se ver que se chegou ao fim.
+        dots.forEach((dot, i) => {
+          dot.toggleAttribute('data-visible', visible.has(i));
+          dot.setAttribute('aria-current', String(i === first));
+        });
         if (prev) prev.disabled = first === 0;
         if (next) next.disabled = last === slides.length - 1;
       },
@@ -242,11 +251,13 @@ const programs = (await getCollection('programs')).sort((a, b) => a.data.order -
     slides.forEach((slide) => observer.observe(slide));
 
     dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i)));
+    // As setas avançam uma "página": o próximo slide escondido passa a ser o primeiro.
     nav?.addEventListener('click', (event) => {
       const button = (event.target as Element).closest<HTMLButtonElement>('button[data-dir]');
-      if (!button) return;
-      const current = visible.size ? Math.min(...visible) : 0;
-      goTo(current + Number(button.dataset.dir));
+      if (!button || !visible.size) return;
+      const first = Math.min(...visible);
+      const last = Math.max(...visible);
+      goTo(button.dataset.dir === '1' ? last + 1 : first - visible.size);
     });
   }
 </script>
