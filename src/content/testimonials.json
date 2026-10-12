@@ -1,0 +1,58 @@
+[
+  {
+    "id": "ricardo-vieira",
+    "order": 1,
+    "name": "Ricardo Vieira",
+    "role": "Aluno",
+    "photo": "../assets/testimonials/ricardo-vieira.jpeg",
+    "quote": "Com o Nelson alcancei a melhor forma física da minha vida. Ganhei resistência, massa muscular e confiança, sempre com uma abordagem que vai além do físico, trabalhando também o psicológico. Recomendo vivamente!"
+  },
+  {
+    "id": "helena-martins",
+    "order": 2,
+    "name": "Helena Martins",
+    "role": "Aluna",
+    "photo": "../assets/testimonials/helena-martins.jpeg",
+    "quote": "Deixei de me sentir estagnada e hoje tenho mais foco, disciplina e controlo muscular. O Nelson inspira, motiva e passa segurança, unindo treino e psicologia para resultados reais."
+  },
+  {
+    "id": "beatriz-mirra",
+    "order": 3,
+    "name": "Beatriz Mirra",
+    "role": "Aluna",
+    "photo": "../assets/testimonials/beatriz-mirra.jpeg",
+    "quote": "Procurei um estilo de vida saudável e hoje tenho mais confiança, foco e determinação. Em 3 meses vi redução de massa gorda e aumento de massa muscular. O treino com acompanhamento é uma experiência de evolução física e pessoal, que vai muito além dos exercícios."
+  },
+  {
+    "id": "madalena-silva",
+    "order": 4,
+    "name": "Madalena Silva",
+    "role": "Aluna",
+    "photo": "../assets/testimonials/madalena-silva.jpeg",
+    "quote": "Comecei a treinar para cuidar de mim física e mentalmente. Os resultados foram rápidos: perdi peso, ganhei confiança e sinto-me melhor no corpo e na mente. Os treinos são desafiantes, mas os resultados são reais e compensadores."
+  },
+  {
+    "id": "diogo-barros",
+    "order": 5,
+    "name": "Diogo Barros",
+    "role": "Aluno",
+    "photo": "../assets/testimonials/diogo-barros.jpeg",
+    "quote": "Treino para manter um estilo de vida saudável e preparar-me para o meu casamento. Os treinos são dinâmicos e intensos, ajudaram-me a ganhar resistência e massa muscular nas pernas, sempre adaptados às minhas necessidades."
+  },
+  {
+    "id": "rui-ribeiro",
+    "order": 6,
+    "name": "Rui Ribeiro",
+    "role": "Aluno",
+    "photo": "../assets/testimonials/rui-ribeiro.jpeg",
+    "quote": "O Nelson foi a minha motivação para começar. O treino tem sido uma boa experiência e já noto evolução, embora ainda não esteja no meu melhor. Claro que recomendo!"
+  },
+  {
+    "id": "ariana-silva",
+    "order": 7,
+    "name": "Ariana Silva",
+    "role": "Aluna",
+    "photo": "../assets/testimonials/ariana-silva.jpeg",
+    "quote": "Procurei tonificar o corpo e ganhar massa muscular. Com o acompanhamento, ganhei força de vontade para treinar e senti melhorias físicas e psicológicas. Os treinos são variados, completos e sempre motivadores."
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "quando-posso-comecar",
+    "order": 1,
+    "question": "Quando posso começar?",
+    "answer": "Antes de avançarmos é preciso conhecer um pouco mais sobre ti e o que te motiva para os teus objetivos. Envia-nos uma mensagem e começamos de imediato."
+  },
+  {
+    "id": "qual-o-nivel-certo",
+    "order": 2,
+    "question": "Qual o nível certo para mim?",
+    "answer": "Recomendamos com base no teu tempo de treino anterior: Iniciante (0-6 meses), Intermédio (6 meses a 2 anos) e Avançado (mais de 2 anos)."
+  },
+  {
+    "id": "a-nutricao-esta-incluida",
+    "order": 3,
+    "question": "A nutrição está incluída?",
+    "answer": "Sim! Guias alimentares adaptados aos teus objetivos: definição, ganho muscular, manutenção de peso, entre outros."
+  },
+  {
+    "id": "como-acompanho-os-resultados",
+    "order": 4,
+    "question": "Como acompanho os meus resultados?",
+    "answer": "A app inclui registo completo: sono, macros, hidratação, medidas corporais e progresso nos treinos."
+  }
+]

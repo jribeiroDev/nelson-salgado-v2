@@ -1,0 +1,146 @@
+[
+  {
+    "id": "programa-hibrido",
+    "order": 1,
+    "name": "Programa Híbrido",
+    "duration": "6 semanas",
+    "level": "Iniciante",
+    "time": "30-60 min",
+    "type": "Corrida e Musculação",
+    "gender": "Homem/Mulher",
+    "popular": true,
+    "description": "Treino inteligente que combina corrida e musculação para transformar a tua performance e composição corporal.",
+    "image": "../assets/programs/programa-hibrido.jpeg",
+    "imageAlt": "Atleta a treinar no Programa Híbrido de corrida e musculação",
+    "features": [
+      { "title": "Método Inteligente", "description": "Corrida + musculação sem conflitos, para resultados consistentes." },
+      { "title": "Mais Rápido e Mais Forte", "description": "Melhora a resistência cardiovascular sem perder força e massa muscular." },
+      { "title": "Plano Semanal", "description": "Estrutura semanal pensada para não desanimares nem estagnares." },
+      { "title": "Suporte Completo", "description": "Estratégias de recuperação e alimentação para acelerar a tua evolução." },
+      { "title": "Resultados Comprovados", "description": "+50 alunos já experimentaram este método com resultados reais.", "highlight": true }
+    ]
+  },
+  {
+    "id": "programa-definicao",
+    "order": 2,
+    "name": "Programa de Definição",
+    "duration": "6 semanas",
+    "level": "Iniciante",
+    "time": "30-45 min",
+    "type": "Full Body",
+    "gender": "Homem/Mulher",
+    "popular": true,
+    "description": "Treinos Full Body que definem o corpo, melhoram a postura e a respiração e aumentam a tua força e resistência.",
+    "image": "../assets/programs/programa-definicao.jpeg",
+    "imageAlt": "Treino de definição muscular full body",
+    "features": [
+      { "title": "Resultados Visíveis", "description": "Estímulos variados para definição muscular sem perder performance." },
+      { "title": "Plano Inteligente", "description": "Estrutura semanal que respeita a recuperação e maximiza resultados." },
+      { "title": "Equilíbrio Total", "description": "Core, membros inferiores e superiores trabalhados de forma estratégica." },
+      { "title": "Mais que Estética", "description": "Melhora a postura, a respiração e o condicionamento físico." },
+      { "title": "Resultados Comprovados", "description": "+30 alunos já atingiram resultados reais com este método.", "highlight": true }
+    ]
+  },
+  {
+    "id": "programa-tonificacao",
+    "order": 3,
+    "name": "Programa de Tonificação",
+    "duration": "6 semanas",
+    "level": "Iniciante",
+    "time": "20-40 min",
+    "type": "Full Body",
+    "gender": "Mulher",
+    "popular": true,
+    "description": "Treinos focados em glúteos, pernas e abdominal, para tonificar, ganhar firmeza e melhorar a postura, sem dietas extremas.",
+    "image": "../assets/programs/programa-tonificacao.jpeg",
+    "imageAlt": "Aluna a treinar com kettlebell no Programa de Tonificação",
+    "features": [
+      { "title": "Glúteos e Pernas em Destaque", "description": "Full Body com ênfase em membros inferiores para transformar a tua silhueta." },
+      { "title": "Força e Resistência", "description": "Estímulos progressivos que tonificam e aceleram o metabolismo." },
+      { "title": "Aceleração Opcional", "description": "Caminhada ou corrida para potenciar a definição." },
+      { "title": "Resultados Reais", "description": "Rotinas equilibradas que trabalham a firmeza muscular, a postura e a confiança." },
+      { "title": "Método Testado", "description": "Testado com dezenas de alunas que já conquistaram firmeza e autoestima.", "highlight": true }
+    ]
+  },
+  {
+    "id": "programa-forca",
+    "order": 4,
+    "name": "Programa de Força",
+    "duration": "6 semanas",
+    "level": "Intermédio",
+    "time": "30-45 min",
+    "type": "Full Body",
+    "gender": "Homem/Mulher",
+    "description": "Foco e intensidade total em cada sessão, com progressão semanal para evitar a estagnação.",
+    "image": "../assets/programs/programa-forca.jpeg",
+    "imageAlt": "Atleta em treino de força no ginásio",
+    "features": [
+      { "title": "Resultados Consistentes", "description": "Treino focado em força máxima, progressão de carga e hipertrofia limpa para quem quer transformar o corpo de forma consistente." },
+      { "title": "Força Pura", "description": "Estrutura de treino baseada em sobrecarga progressiva para construir músculo sólido." },
+      { "title": "Resultados Medidos", "description": "Aumento real de carga e volume a cada semana." },
+      { "title": "Divisão Estratégica", "description": "Rotina pensada para recuperação ideal e crescimento contínuo." },
+      { "title": "Suporte Completo", "description": "Estratégias de alimentação e recuperação para maximizar a hipertrofia." },
+      { "title": "Resultados Comprovados", "description": "Programa usado por alunos que conquistaram resultados visíveis em poucas semanas.", "highlight": true }
+    ]
+  },
+  {
+    "id": "programa-iniciacao",
+    "order": 5,
+    "name": "Programa de Iniciação",
+    "duration": "6 semanas",
+    "level": "Iniciante",
+    "time": "30-40 min",
+    "type": "Iniciação",
+    "gender": "Homem/Mulher",
+    "description": "Treinos simples, orientações claras e suporte completo para ganhar confiança, melhorar a saúde e criar uma boa rotina de treino.",
+    "image": "../assets/programs/programa-iniciacao.jpeg",
+    "imageAlt": "Iniciante a treinar com acompanhamento do personal trainer",
+    "features": [
+      { "title": "Começa do Zero em Segurança", "description": "Exercícios simples e progressivos para fazer em casa ou no ginásio." },
+      { "title": "Plano 100% Adaptado", "description": "Adaptado ao teu objetivo: seja emagrecer ou ganhar massa muscular." },
+      { "title": "Passo a Passo", "description": "Vídeos explicativos e orientações claras para treinar sem medo de errar." },
+      { "title": "Suporte Total", "description": "Dicas de mobilidade, alimentação e descanso para resultados surpreendentes." },
+      { "title": "Perfeito para Iniciantes", "description": "Programa perfeito para quem nunca treinou ou quer recomeçar sem pressão.", "highlight": true }
+    ]
+  },
+  {
+    "id": "programa-express",
+    "order": 6,
+    "name": "Programa Express",
+    "duration": "6 semanas",
+    "level": "Experiente",
+    "time": "20-30 min",
+    "type": "Express",
+    "gender": "Homem/Mulher",
+    "description": "Treinos estratégicos e curtos para quem quer resultados sem perder tempo.",
+    "image": "../assets/programs/programa-express.jpeg",
+    "imageAlt": "Treino rápido e intenso do Programa Express",
+    "features": [
+      { "title": "Perfeito para Dias Corridos", "description": "Treinos rápidos e eficazes, que cabem perfeitamente na tua rotina." },
+      { "title": "Planeamento Eficaz", "description": "Cada treino, cada minuto, é planeado para resultados reais e duradouros." },
+      { "title": "Versátil e Flexível", "description": "Opções para definição, queima de gordura ou força." },
+      { "title": "Em Casa ou no Ginásio", "description": "Com ou sem equipamento: zero desculpas." },
+      { "title": "Para Quem Não Tem Tempo", "description": "Criado para quem não tem muito tempo, mas não abdica da saúde.", "highlight": true }
+    ]
+  },
+  {
+    "id": "programa-abdominal",
+    "order": 7,
+    "name": "Programa Abdominal",
+    "duration": "6 semanas",
+    "level": "Experiente",
+    "time": "20-35 min",
+    "type": "Core",
+    "gender": "Homem/Mulher",
+    "description": "Plano avançado para fortalecer e esculpir o abdominal, melhorar a postura e acelerar resultados.",
+    "image": "../assets/programs/programa-abdominal.jpeg",
+    "imageAlt": "Treino de abdominal e core",
+    "features": [
+      { "title": "Core Estético e Funcional", "description": "Para além da estética, protege a lombar e melhora a estabilidade." },
+      { "title": "Método Eficiente", "description": "Sessões curtas, intensas e sem exercícios inúteis." },
+      { "title": "Definição Inteligente", "description": "Estratégias para definir o abdominal e queimar gordura em simultâneo." },
+      { "title": "Suporte Alimentar", "description": "Ajustes estratégicos para reduzir a gordura e realçar os abdominais." },
+      { "title": "Abdominal em Tempo Recorde", "description": "Ideal para quem quer construir um abdominal bonito e saudável em tempo recorde.", "highlight": true }
+    ]
+  }
+]

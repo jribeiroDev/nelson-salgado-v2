@@ -1,0 +1,27 @@
+---
+import { buildMessage, buildWhatsAppUrl, DEFAULT_MESSAGE } from '../lib/whatsapp';
+
+interface Props {
+  /** Programa ou plano de interesse — incluído na mensagem. */
+  interest?: string;
+  class?: string;
+  'aria-label'?: string;
+}
+
+const { interest, class: className, 'aria-label': ariaLabel } = Astro.props;
+// Link real (funciona sem JS e é visível a crawlers). Com JS, o WhatsAppDialog
+// interceta o clique para pedir o nome antes de abrir a conversa.
+const href = buildWhatsAppUrl(interest ? buildMessage('', interest) : DEFAULT_MESSAGE);
+---
+
+<a
+  href={href}
+  class={className}
+  target="_blank"
+  rel="noopener"
+  data-wa
+  data-interest={interest}
+  aria-label={ariaLabel}
+>
+  <slot />
+</a>

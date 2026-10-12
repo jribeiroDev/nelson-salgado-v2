@@ -1,0 +1,78 @@
+---
+import Icon from './Icon.astro';
+---
+
+<dialog id="wa-dialog" class="modal" aria-labelledby="wa-dialog-title">
+  <form method="dialog" id="wa-form" class="p-6 sm:p-8">
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h2 id="wa-dialog-title" class="text-2xl font-bold text-blue">Quase lá! 🎯</h2>
+        <p class="mt-1 text-sm text-blue/80">Diz-nos o teu nome para continuar.</p>
+      </div>
+      <button
+        type="button"
+        id="wa-close"
+        class="-m-2 inline-flex size-11 cursor-pointer items-center justify-center rounded-full text-blue hover:bg-beige"
+        aria-label="Fechar"
+      >
+        <Icon name="close" />
+      </button>
+    </div>
+
+    <p id="wa-interest" class="mt-4 hidden rounded-lg bg-beige px-3 py-2 text-sm text-darkblue"></p>
+
+    <label for="wa-name" class="mt-5 block text-sm font-semibold text-blue">Qual é o teu nome?</label>
+    <input
+      id="wa-name"
+      name="name"
+      type="text"
+      required
+      minlength="2"
+      maxlength="60"
+      autocomplete="given-name"
+      placeholder="Escreve o teu nome…"
+      class="mt-2 block w-full rounded-xl border-2 border-blue/20 px-4 py-3 text-base text-darkblue outline-none focus:border-blue focus:ring-2 focus:ring-blue/20"
+    />
+
+    <button type="submit" class="btn mt-5 w-full rounded-xl bg-whatsapp text-ink hover:brightness-95">
+      <Icon name="whatsapp" /> Continuar para o WhatsApp
+    </button>
+  </form>
+</dialog>
+
+<script>
+  import { buildMessage, buildWhatsAppUrl } from '../lib/whatsapp';
+
+  const dialog = document.getElementById('wa-dialog') as HTMLDialogElement;
+  const form = document.getElementById('wa-form') as HTMLFormElement;
+  const input = document.getElementById('wa-name') as HTMLInputElement;
+  const interestEl = document.getElementById('wa-interest') as HTMLParagraphElement;
+  let interest: string | undefined;
+
+  // Delegação: qualquer link [data-wa] abre o diálogo em vez de ir direto ao WhatsApp.
+  document.addEventListener('click', (event) => {
+    const link = (event.target as Element).closest<HTMLAnchorElement>('a[data-wa]');
+    if (!link || event.ctrlKey || event.metaKey || event.shiftKey) return;
+    event.preventDefault();
+    interest = link.dataset.interest || undefined;
+    interestEl.textContent = interest ? `Interesse: ${interest}` : '';
+    interestEl.classList.toggle('hidden', !interest);
+    dialog.showModal();
+    input.focus();
+  });
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const name = input.value.trim();
+    if (!name) return;
+    window.open(buildWhatsAppUrl(buildMessage(name, interest)), '_blank', 'noopener');
+    dialog.close();
+    form.reset();
+  });
+
+  document.getElementById('wa-close')!.addEventListener('click', () => dialog.close());
+  // Fechar ao clicar no backdrop.
+  dialog.addEventListener('click', (event) => {
+    if (event.target === dialog) dialog.close();
+  });
+</script>

@@ -1,0 +1,42 @@
+---
+import site from '../content/site.json';
+import Icon from './Icon.astro';
+import WhatsAppLink from './WhatsAppLink.astro';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-beige px-4 py-10 text-blue sm:px-6 lg:px-8">
+  <div class="mx-auto flex max-w-6xl flex-col items-center gap-6 text-center">
+    <p class="text-lg font-extrabold text-darkblue">
+      Nelson <span class="text-gold-dark">Salgado</span> · Personal Trainer
+    </p>
+
+    <ul class="flex gap-4">
+      <li>
+        <WhatsAppLink
+          class="inline-flex size-11 items-center justify-center rounded-full bg-white text-darkblue shadow-sm transition hover:text-gold-dark"
+          aria-label="WhatsApp"
+        >
+          <Icon name="whatsapp" />
+        </WhatsAppLink>
+      </li>
+      <li>
+        <a
+          href={site.instagram}
+          target="_blank"
+          rel="noopener me"
+          class="inline-flex size-11 items-center justify-center rounded-full bg-white text-darkblue shadow-sm transition hover:text-gold-dark"
+          aria-label={`Instagram ${site.instagramHandle}`}
+        >
+          <Icon name="instagram" />
+        </a>
+      </li>
+    </ul>
+
+    <div class="space-y-1 text-sm">
+      <p>© {year} {site.name}. Todos os direitos reservados.</p>
+      <p>Desenvolvido por <span class="font-semibold text-gold-dark">{site.credit.label}</span></p>
+    </div>
+  </div>
+</footer>

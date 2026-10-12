@@ -1,0 +1,29 @@
+---
+const nav = [
+  { href: '#planos', label: 'Planos' },
+  { href: '#programas', label: 'Programas' },
+  { href: '#testemunhos', label: 'Testemunhos' },
+  { href: '#faq', label: 'FAQ' },
+];
+---
+
+<header class="absolute inset-x-0 top-0 z-20">
+  <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
+    <a href="/" class="text-lg font-extrabold tracking-tight text-white">
+      Nelson <span class="text-gold">Salgado</span>
+    </a>
+    <nav aria-label="Principal" class="hidden md:block">
+      <ul class="flex gap-8 text-sm font-semibold text-white/90">
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} class="transition hover:text-gold">
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>

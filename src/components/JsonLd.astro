@@ -1,0 +1,122 @@
+---
+import { getCollection } from 'astro:content';
+import site from '../content/site.json';
+
+const byOrder = (a: { data: { order: number } }, b: { data: { order: number } }) =>
+  a.data.order - b.data.order;
+const plans = (await getCollection('plans')).sort(byOrder);
+const programs = (await getCollection('programs')).sort(byOrder);
+const faq = (await getCollection('faq')).sort(byOrder);
+
+const base = site.url.replace(/\/$/, '');
+const ids = {
+  website: `${base}/#website`,
+  webpage: `${base}/#webpage`,
+  person: `${base}/#nelson-salgado`,
+  business: `${base}/#business`,
+};
+
+// Testemunhos não são marcados como Review/AggregateRating: reviews publicadas pelo
+// próprio negócio não são elegíveis para rich results segundo as diretrizes do Google.
+const graph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': ids.website,
+      url: `${base}/`,
+      name: `${site.name} – ${site.jobTitle}`,
+      inLanguage: 'pt-PT',
+      publisher: { '@id': ids.business },
+    },
+    {
+      '@type': 'WebPage',
+      '@id': ids.webpage,
+      url: `${base}/`,
+      name: site.title,
+      description: site.description,
+      inLanguage: 'pt-PT',
+      isPartOf: { '@id': ids.website },
+      about: { '@id': ids.person },
+      primaryImageOfPage: `${base}/og-image.jpg`,
+    },
+    {
+      '@type': 'Person',
+      '@id': ids.person,
+      name: site.name,
+      jobTitle: site.jobTitle,
+      url: `${base}/`,
+      image: `${base}/og-image.jpg`,
+      sameAs: [site.instagram],
+      worksFor: { '@id': ids.business },
+    },
+    {
+      '@type': 'ProfessionalService',
+      '@id': ids.business,
+      name: `${site.name} – ${site.jobTitle}`,
+      url: `${base}/`,
+      image: `${base}/og-image.jpg`,
+      description: site.description,
+      telephone: `+${site.whatsapp}`,
+      areaServed: { '@type': 'Country', name: 'Portugal' },
+      founder: { '@id': ids.person },
+      sameAs: [site.instagram],
+      priceRange: `${Math.min(...plans.map((p) => p.data.price))}€ – ${Math.max(...plans.map((p) => p.data.price))}€ / mês`,
+      contactPoint: {
+        '@type': 'ContactPoint',
+        contactType: 'customer service',
+        telephone: `+${site.whatsapp}`,
+        url: `https://wa.me/${site.whatsapp}`,
+        availableLanguage: ['Portuguese'],
+      },
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: 'Acompanhamentos e programas de treino',
+        itemListElement: [
+          ...plans.map((p) => ({
+            '@type': 'Offer',
+            name: p.data.name,
+            description: p.data.tagline,
+            url: `${base}/#planos`,
+            priceSpecification: {
+              '@type': 'UnitPriceSpecification',
+              price: p.data.price,
+              priceCurrency: 'EUR',
+              unitCode: 'MON',
+              unitText: 'mês',
+            },
+            itemOffered: {
+              '@type': 'Service',
+              name: `Acompanhamento personal trainer – ${p.data.name}`,
+              provider: { '@id': ids.business },
+            },
+          })),
+          ...programs.map((p) => ({
+            '@type': 'Offer',
+            url: `${base}/#${p.id}`,
+            itemOffered: {
+              '@type': 'Service',
+              name: p.data.name,
+              description: p.data.description,
+              serviceType: 'Treino personalizado',
+              provider: { '@id': ids.business },
+            },
+          })),
+        ],
+      },
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${base}/#faq`,
+      isPartOf: { '@id': ids.webpage },
+      mainEntity: faq.map((f) => ({
+        '@type': 'Question',
+        name: f.data.question,
+        acceptedAnswer: { '@type': 'Answer', text: f.data.answer },
+      })),
+    },
+  ],
+};
+---
+
+<script is:inline type="application/ld+json" set:html={JSON.stringify(graph)} />

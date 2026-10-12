@@ -1,0 +1,40 @@
+---
+import '../styles/global.css';
+import SEO from '../components/SEO.astro';
+import JsonLd from '../components/JsonLd.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  noindex?: boolean;
+  structuredData?: boolean;
+}
+
+const { title, description, noindex = false, structuredData = true } = Astro.props;
+---
+
+<!doctype html>
+<html lang="pt-PT">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <slot name="preload" />
+    <SEO title={title} description={description} noindex={noindex} />
+    <meta name="theme-color" content="#1f2f3f" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    {structuredData && <JsonLd />}
+  </head>
+  <body>
+    <a
+      href="#conteudo"
+      class="sr-only z-50 rounded bg-gold px-4 py-2 font-bold text-ink focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+    >
+      Saltar para o conteúdo
+    </a>
+    <slot />
+  </body>
+</html>

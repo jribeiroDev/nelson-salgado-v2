@@ -1,0 +1,45 @@
+[
+  {
+    "id": "plano-mensal",
+    "order": 1,
+    "name": "Plano Mensal",
+    "price": 55,
+    "tagline": "Ideal para testar o método e sentir os primeiros resultados.",
+    "benefits": [
+      "Acesso imediato aos nossos programas exclusivos",
+      "Acompanhamento 1:1 para definição de objetivos",
+      "Plano alimentar personalizado ao objetivo"
+    ]
+  },
+  {
+    "id": "plano-trimestral",
+    "order": 2,
+    "name": "Plano Trimestral",
+    "price": 35,
+    "popular": true,
+    "tagline": "Para quem está pronto para mudar de vida de forma definitiva.",
+    "includesPrevious": "Tudo no plano mensal, mais:",
+    "benefits": [
+      "Suporte prioritário",
+      "Acesso vitalício ao histórico de treinos",
+      "Ajustes semanais no plano de treino",
+      "+50 receitas saudáveis",
+      "Ebook grátis sobre como criar hábitos saudáveis e eficazes",
+      "Descontos exclusivos em eventos e merchandising"
+    ]
+  },
+  {
+    "id": "plano-semestral",
+    "order": 3,
+    "name": "Plano Semestral",
+    "price": 25,
+    "tagline": "Compromisso sério com resultados visíveis e consistentes.",
+    "includesPrevious": "Tudo no plano mensal, mais:",
+    "benefits": [
+      "Acesso antecipado a novos programas",
+      "Reajustes contínuos conforme o progresso",
+      "Acesso a desafios exclusivos da nossa comunidade",
+      "Ebook grátis sobre receitas saudáveis"
+    ]
+  }
+]

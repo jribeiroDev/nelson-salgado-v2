@@ -1,0 +1,23 @@
+{
+  "name": "Nelson Salgado",
+  "jobTitle": "Personal Trainer",
+  "url": "https://nelson-salgado.pt",
+  "title": "Nelson Salgado | Personal Trainer – Treino Personalizado",
+  "description": "Personal trainer com programas de treino personalizados para todos os níveis: força, definição, tonificação e emagrecimento. Resultados em 90 dias.",
+  "locale": "pt_PT",
+  "whatsapp": "351910436302",
+  "instagram": "https://www.instagram.com/elite_salgado",
+  "instagramHandle": "@elite_salgado",
+  "hero": {
+    "eyebrow": "Personal Trainer Nelson Salgado",
+    "title": "Descobre o teu programa ideal",
+    "subtitle": "Treino personalizado e acompanhamento 1:1 para transformares o teu corpo e a tua rotina.",
+    "cta": "Participe agora"
+  },
+  "stats": [
+    { "value": "500+", "label": "Membros ativos" },
+    { "value": "24/7", "label": "Acesso total" },
+    { "value": "15+", "label": "Modalidades" }
+  ],
+  "credit": { "label": "JR Web Solutions" }
+}

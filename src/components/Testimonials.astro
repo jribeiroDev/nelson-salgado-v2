@@ -1,0 +1,54 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import CarouselControls from './CarouselControls.astro';
+
+const testimonials = (await getCollection('testimonials')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<section id="testemunhos" class="defer-render scroll-mt-4 bg-beige px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+  <div class="mx-auto max-w-7xl">
+    <div class="mb-10 text-center sm:mb-14">
+      <h2 class="section-title">O que dizem os nossos clientes</h2>
+    </div>
+
+    <ul id="testemunhos-lista" class="snap-row" aria-label="Testemunhos de alunos">
+      {
+        testimonials.map(({ data: t }) => (
+          <li class="w-[85%] max-w-sm sm:w-96">
+            <figure class="flex h-full flex-col gap-4 rounded-2xl border border-gold/25 bg-white p-6 shadow-sm">
+              <div class="flex items-center gap-4">
+                <Image
+                  src={t.photo}
+                  alt={`Fotografia de ${t.name}`}
+                  width={56}
+                  height={56}
+                  densities={[1, 2]}
+                  format="webp"
+                  quality={70}
+                  loading="lazy"
+                  decoding="async"
+                  class="size-14 shrink-0 rounded-full border-2 border-gold object-cover"
+                />
+                <figcaption>
+                  <p class="font-semibold text-darkblue">{t.name}</p>
+                  <p class="text-sm text-blue">{t.role}</p>
+                  <p class="mt-1 flex gap-0.5 text-gold" role="img" aria-label="5 estrelas">
+                    {Array.from({ length: 5 }, () => (
+                      <Icon name="star" class="size-3.5" />
+                    ))}
+                  </p>
+                </figcaption>
+              </div>
+              <blockquote class="text-sm leading-relaxed text-darkblue/80">
+                <p>“{t.quote}”</p>
+              </blockquote>
+            </figure>
+          </li>
+        ))
+      }
+    </ul>
+    <CarouselControls target="testemunhos-lista" label="Testemunhos" />
+  </div>
+</section>
