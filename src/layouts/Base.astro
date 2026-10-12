@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { Font } from 'astro:assets';
 import SEO from '../components/SEO.astro';
 import JsonLd from '../components/JsonLd.astro';
 
@@ -18,7 +19,7 @@ const { title, description, noindex = false, structuredData = true } = Astro.pro
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <slot name="preload" />
+    <Font cssVariable="--font-jakarta" preload />
     <SEO title={title} description={description} noindex={noindex} />
     <meta name="theme-color" content="#1f2f3f" />
     <meta name="format-detection" content="telephone=no" />

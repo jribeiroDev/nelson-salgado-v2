@@ -2,53 +2,67 @@
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
-import CarouselControls from './CarouselControls.astro';
 
 const testimonials = (await getCollection('testimonials')).sort((a, b) => a.data.order - b.data.order);
+// A faixa é duplicada para o loop infinito (translate -50%). A cópia é escondida de
+// leitores de ecrã/teclado (aria-hidden + inert) para não repetir conteúdo.
+const copies = [false, true];
 ---
 
-<section id="testemunhos" class="defer-render scroll-mt-4 bg-beige px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
-  <div class="mx-auto max-w-7xl">
-    <div class="mb-10 text-center sm:mb-14">
-      <h2 class="section-title">O que dizem os nossos clientes</h2>
-    </div>
+<section id="testemunhos" class="defer-render overflow-hidden bg-beige py-20 sm:py-24 lg:py-32">
+  <svg class="hidden" aria-hidden="true">
+    <symbol id="star" viewBox="0 0 24 24">
+      <path fill="currentColor" d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z" />
+    </symbol>
+  </svg>
+  <div class="reveal mx-auto max-w-2xl px-4 text-center sm:px-6">
+    <p class="eyebrow">Testemunhos</p>
+    <h2 class="section-title">O que dizem os nossos clientes</h2>
+  </div>
 
-    <ul id="testemunhos-lista" class="snap-row" aria-label="Testemunhos de alunos">
+  <div class="marquee mt-14" style={`--marquee-duration: ${testimonials.length * 9}s`}>
+    <ul class="marquee-track" aria-label="Testemunhos de alunos">
       {
-        testimonials.map(({ data: t }) => (
-          <li class="w-[85%] max-w-sm sm:w-96">
-            <figure class="flex h-full flex-col gap-4 rounded-2xl border border-gold/25 bg-white p-6 shadow-sm">
-              <div class="flex items-center gap-4">
-                <Image
-                  src={t.photo}
-                  alt={`Fotografia de ${t.name}`}
-                  width={56}
-                  height={56}
-                  densities={[1, 2]}
-                  format="webp"
-                  quality={70}
-                  loading="lazy"
-                  decoding="async"
-                  class="size-14 shrink-0 rounded-full border-2 border-gold object-cover"
-                />
-                <figcaption>
-                  <p class="font-semibold text-darkblue">{t.name}</p>
-                  <p class="text-sm text-blue">{t.role}</p>
-                  <p class="mt-1 flex gap-0.5 text-gold" role="img" aria-label="5 estrelas">
-                    {Array.from({ length: 5 }, () => (
-                      <Icon name="star" class="size-3.5" />
-                    ))}
-                  </p>
+        copies.map((isCopy) =>
+          testimonials.map(({ data: t }) => (
+            <li class="me-6 w-[19rem] shrink-0 sm:w-[23rem]" aria-hidden={isCopy ? 'true' : undefined} inert={isCopy}>
+              <figure class="flex h-full flex-col rounded-3xl bg-white p-7 shadow-[0_20px_40px_-30px_rgb(31_47_63/0.4)] ring-1 ring-darkblue/5">
+                <div class="flex items-center justify-between">
+                  <Icon name="quote" class="size-8 text-gold/70" />
+                  <svg class="h-4 w-[5.5rem] text-gold" viewBox="0 0 120 24" role="img" aria-label="5 estrelas">
+                    <use href="#star" width="24" height="24" />
+                    <use href="#star" x="24" width="24" height="24" />
+                    <use href="#star" x="48" width="24" height="24" />
+                    <use href="#star" x="72" width="24" height="24" />
+                    <use href="#star" x="96" width="24" height="24" />
+                  </svg>
+                </div>
+                <blockquote class="mt-4 flex-1 text-[0.95rem] leading-relaxed text-darkblue/80">
+                  <p>{t.quote}</p>
+                </blockquote>
+                <figcaption class="mt-6 flex items-center gap-3 border-t border-darkblue/10 pt-5">
+                  <Image
+                    src={t.photo}
+                    alt={isCopy ? '' : `Fotografia de ${t.name}`}
+                    width={48}
+                    height={48}
+                    densities={[1, 2]}
+                    format="webp"
+                    quality={70}
+                    loading="lazy"
+                    decoding="async"
+                    class="size-12 shrink-0 rounded-full object-cover ring-2 ring-gold ring-offset-2"
+                  />
+                  <span>
+                    <span class="block font-bold text-darkblue">{t.name}</span>
+                    <span class="block text-sm text-blue">{t.role}</span>
+                  </span>
                 </figcaption>
-              </div>
-              <blockquote class="text-sm leading-relaxed text-darkblue/80">
-                <p>“{t.quote}”</p>
-              </blockquote>
-            </figure>
-          </li>
-        ))
+              </figure>
+            </li>
+          )),
+        )
       }
     </ul>
-    <CarouselControls target="testemunhos-lista" label="Testemunhos" />
   </div>
 </section>

@@ -1,7 +1,7 @@
 ---
 // Ícones SVG inline (sem biblioteca de ícones no bundle).
 interface Props {
-  name: 'check' | 'whatsapp' | 'instagram' | 'star' | 'plus' | 'clock' | 'bolt' | 'user' | 'calendar' | 'close' | 'chevron-left' | 'chevron-right';
+  name: 'check' | 'whatsapp' | 'instagram' | 'star' | 'plus' | 'clock' | 'bolt' | 'user' | 'calendar' | 'close' | 'chevron-left' | 'chevron-right' | 'quote' | 'arrow-right';
   class?: string;
 }
 const { name, class: className = 'size-5' } = Astro.props;
@@ -21,6 +21,10 @@ const paths: Record<Props['name'], string> = {
     '<path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m15 18-6-6 6-6"/>',
   'chevron-right':
     '<path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6"/>',
+  quote:
+    '<path fill="currentColor" d="M9.6 5C5.9 6.3 3.5 9.4 3.5 13.4V19h6.6v-6.4H6.9c.1-2.6 1.6-4.5 3.6-5.4L9.6 5Zm10 0c-3.7 1.3-6.1 4.4-6.1 8.4V19h6.6v-6.4h-3.2c.1-2.6 1.6-4.5 3.6-5.4L19.6 5Z"/>',
+  'arrow-right':
+    '<path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/>',
   clock:
     '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></g>',
   bolt: '<path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M13 2 4 14h7l-1 8 9-12h-7z"/>',

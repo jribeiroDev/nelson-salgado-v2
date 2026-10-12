@@ -4,39 +4,65 @@ import Icon from './Icon.astro';
 import WhatsAppLink from './WhatsAppLink.astro';
 
 const year = new Date().getFullYear();
+const nav = [
+  { href: '#planos', label: 'Planos' },
+  { href: '#programas', label: 'Programas' },
+  { href: '#testemunhos', label: 'Testemunhos' },
+  { href: '#faq', label: 'FAQ' },
+];
 ---
 
-<footer class="bg-beige px-4 py-10 text-blue sm:px-6 lg:px-8">
-  <div class="mx-auto flex max-w-6xl flex-col items-center gap-6 text-center">
-    <p class="text-lg font-extrabold text-darkblue">
-      Nelson <span class="text-gold-dark">Salgado</span> · Personal Trainer
-    </p>
+<footer class="bg-darkblue px-4 pt-16 pb-10 text-white/75 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-6xl">
+    <div class="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
+      <div class="max-w-sm">
+        <p class="text-2xl font-extrabold tracking-tight text-white">
+          Nelson <span class="text-gold">Salgado</span>
+        </p>
+        <p class="mt-1 text-sm font-semibold tracking-[0.18em] text-gold uppercase">Personal Trainer</p>
+        <p class="mt-4 text-[0.95rem]">{site.hero.subtitle}</p>
+      </div>
 
-    <ul class="flex gap-4">
-      <li>
-        <WhatsAppLink
-          class="inline-flex size-11 items-center justify-center rounded-full bg-white text-darkblue shadow-sm transition hover:text-gold-dark"
-          aria-label="WhatsApp"
-        >
-          <Icon name="whatsapp" />
-        </WhatsAppLink>
-      </li>
-      <li>
-        <a
-          href={site.instagram}
-          target="_blank"
-          rel="noopener me"
-          class="inline-flex size-11 items-center justify-center rounded-full bg-white text-darkblue shadow-sm transition hover:text-gold-dark"
-          aria-label={`Instagram ${site.instagramHandle}`}
-        >
-          <Icon name="instagram" />
-        </a>
-      </li>
-    </ul>
+      <nav aria-label="Rodapé">
+        <ul class="grid grid-cols-2 gap-x-10 gap-y-3 text-[0.95rem] font-semibold">
+          {
+            nav.map((item) => (
+              <li>
+                <a href={item.href} class="transition hover:text-gold">
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
 
-    <div class="space-y-1 text-sm">
+      <ul class="flex gap-3">
+        <li>
+          <WhatsAppLink
+            class="inline-flex size-12 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-gold hover:text-ink"
+            aria-label="WhatsApp"
+          >
+            <Icon name="whatsapp" />
+          </WhatsAppLink>
+        </li>
+        <li>
+          <a
+            href={site.instagram}
+            target="_blank"
+            rel="noopener me"
+            class="inline-flex size-12 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-gold hover:text-ink"
+            aria-label={`Instagram ${site.instagramHandle}`}
+          >
+            <Icon name="instagram" />
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="mt-12 flex flex-col gap-2 border-t border-white/10 pt-8 text-sm sm:flex-row sm:justify-between">
       <p>© {year} {site.name}. Todos os direitos reservados.</p>
-      <p>Desenvolvido por <span class="font-semibold text-gold-dark">{site.credit.label}</span></p>
+      <p>Desenvolvido por <span class="font-semibold text-gold">{site.credit.label}</span></p>
     </div>
   </div>
 </footer>

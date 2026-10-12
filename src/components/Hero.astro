@@ -1,6 +1,7 @@
 ---
 import { Picture } from 'astro:assets';
 import site from '../content/site.json';
+import Icon from './Icon.astro';
 import hero1 from '../assets/hero/hero-1.jpeg';
 import hero2 from '../assets/hero/hero-2.jpeg';
 import hero3 from '../assets/hero/hero-3.jpeg';
@@ -12,9 +13,16 @@ const images = [
   { src: hero3, alt: 'Aluna em treino funcional ao ar livre' },
   { src: hero4, alt: 'Atleta em treino de musculação com halteres' },
 ];
+
+// Destaca as duas últimas palavras do título a dourado ("programa ideal").
+const words = site.hero.title.split(' ');
+const titleStart = words.slice(0, -2).join(' ');
+const titleEnd = words.slice(-2).join(' ');
 ---
 
 <section class="relative isolate flex min-h-svh w-full items-center overflow-hidden bg-darkblue">
+  <div id="hero-sentinel" class="pointer-events-none absolute inset-x-0 top-0 h-24" aria-hidden="true"></div>
+
   <div class="absolute inset-0 -z-10 grid grid-cols-2 grid-rows-2 sm:grid-cols-4 sm:grid-rows-1">
     {
       images.map((img) => (
@@ -37,30 +45,57 @@ const images = [
       ))
     }
   </div>
-  <div class="absolute inset-0 -z-10 bg-gradient-to-b from-black/60 via-black/45 to-black/70"></div>
+  <div
+    class="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgb(31_47_63/0.55),rgb(31_47_63/0.88))]"
+  >
+  </div>
+  <div class="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-darkblue/90 to-transparent"></div>
 
-  <div class="mx-auto flex w-full max-w-5xl flex-col items-center px-4 pt-20 pb-24 text-center sm:px-6 lg:px-8">
-    <h1 class="text-white">
-      <span class="mb-3 block text-sm font-semibold tracking-[0.2em] text-gold uppercase sm:text-base">
+  <div class="mx-auto flex w-full max-w-5xl flex-col items-center px-4 pt-28 pb-24 text-center sm:px-6 lg:px-8">
+    <h1 class="flex flex-col items-center text-white">
+      <span
+        class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-white/90 backdrop-blur-sm sm:text-sm"
+      >
+        <span class="size-2 rounded-full bg-gold shadow-[0_0_0_4px_rgb(201_164_77/0.25)]"></span>
         {site.hero.eyebrow}
       </span>
-      <span class="block text-4xl leading-tight font-bold text-balance sm:text-5xl md:text-6xl lg:text-7xl">
-        {site.hero.title}
+      <span class="mt-6 block text-[2.6rem] leading-[1.06] font-bold text-balance sm:text-6xl lg:text-7xl">
+        {titleStart} <span class="text-gold">{titleEnd}</span>
       </span>
     </h1>
-    <p class="mt-5 max-w-2xl text-base text-pretty text-white/85 sm:text-lg">{site.hero.subtitle}</p>
+    <p class="mt-6 max-w-2xl text-lg text-pretty text-white/80 sm:text-xl">{site.hero.subtitle}</p>
 
-    <a href="#planos" class="btn-gold mt-8 uppercase">{site.hero.cta}</a>
+    <div class="mt-9 flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row">
+      <a href="#planos" class="btn-gold w-full sm:w-auto">
+        {site.hero.cta}
+        <Icon name="arrow-right" class="size-4" />
+      </a>
+      <a href="#programas" class="btn-ghost w-full sm:w-auto">Ver programas</a>
+    </div>
 
-    <ul class="mt-10 grid w-full max-w-3xl grid-cols-3 gap-3 sm:mt-14 sm:gap-6">
+    <ul
+      class="mt-12 grid w-full max-w-2xl grid-cols-3 divide-x divide-white/15 rounded-2xl border border-white/15 bg-white/[0.07] py-4 backdrop-blur-md sm:mt-16 sm:py-6"
+    >
       {
         site.stats.map((stat) => (
-          <li class="rounded-xl border border-white/20 bg-white/10 p-3 text-center backdrop-blur-sm sm:p-5">
-            <p class="text-2xl font-bold text-gold sm:text-3xl lg:text-4xl">{stat.value}</p>
-            <p class="mt-1 text-[0.65rem] tracking-wide text-white/85 uppercase sm:text-sm">{stat.label}</p>
+          <li class="px-2 text-center">
+            <p class="text-2xl font-extrabold text-gold sm:text-4xl">{stat.value}</p>
+            <p class="mt-1 text-[0.7rem] font-medium tracking-wider text-white/75 uppercase sm:text-xs">
+              {stat.label}
+            </p>
           </li>
         ))
       }
     </ul>
   </div>
+
+  <a
+    href="#planos"
+    class="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-[0.7rem] font-semibold tracking-[0.2em] text-white/70 uppercase transition hover:text-gold sm:flex"
+  >
+    <span>Scroll<span class="sr-only"> até aos planos</span></span>
+    <span class="flex h-9 w-5 justify-center rounded-full border-2 border-current pt-1.5">
+      <span class="h-2 w-0.5 animate-bounce rounded-full bg-current"></span>
+    </span>
+  </a>
 </section>

@@ -3,94 +3,250 @@ import { getCollection } from 'astro:content';
 import { Picture } from 'astro:assets';
 import Icon from './Icon.astro';
 import WhatsAppLink from './WhatsAppLink.astro';
-import CarouselControls from './CarouselControls.astro';
 
 const programs = (await getCollection('programs')).sort((a, b) => a.data.order - b.data.order);
 ---
 
-<section id="programas" class="defer-render scroll-mt-4 bg-white px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
-  <div class="mx-auto max-w-7xl">
-    <div class="mb-10 text-center sm:mb-14">
+<section id="programas" class="defer-render bg-white py-20 sm:py-24 lg:py-32">
+  <div class="mx-auto flex max-w-7xl flex-col gap-6 px-4 sm:px-6 md:flex-row md:items-end md:justify-between lg:px-8">
+    <div class="reveal max-w-2xl">
+      <p class="eyebrow">Programas</p>
       <h2 class="section-title">Os Nossos Programas</h2>
-      <p class="mt-3 text-lg text-blue sm:text-xl">Programas de treino com resultados em apenas 90 dias</p>
+      <p class="section-lead">Resultados em apenas 90 dias.</p>
     </div>
-
-    <ul id="programas-lista" class="snap-row items-start" aria-label="Programas de treino">
-      {
-        programs.map(({ id, data: p }) => (
-          <li class="w-[82%] max-w-sm sm:w-80">
-            <article
-              id={id}
-              class="flex h-full scroll-mt-6 flex-col overflow-hidden rounded-2xl border border-darkblue/10 bg-beige shadow-md"
-            >
-              <div class="relative aspect-[4/5] overflow-hidden">
-                <Picture
-                  src={p.image}
-                  alt={p.imageAlt}
-                  formats={['avif', 'webp']}
-                  widths={[320, 480, 640]}
-                  sizes="(min-width: 640px) 320px, 82vw"
-                  quality={60}
-                  loading="lazy"
-                  decoding="async"
-                  class="h-full w-full object-cover"
-                  pictureAttributes={{ class: 'block h-full w-full' }}
-                />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
-                {p.popular && (
-                  <p class="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full bg-gold px-2.5 py-1 text-xs font-bold text-ink">
-                    <Icon name="star" class="size-3" /> Popular
-                  </p>
-                )}
-                <div class="absolute inset-x-0 bottom-0 p-4 text-white">
-                  <h3 class="text-xl font-bold">{p.name}</h3>
-                  <p class="text-sm text-white/85">
-                    {p.gender} • {p.duration}
-                  </p>
-                </div>
-              </div>
-
-              <div class="flex flex-1 flex-col p-5">
-                <ul class="mb-4 flex flex-wrap gap-2 text-xs font-semibold text-blue">
-                  <li class="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1">
-                    <Icon name="user" class="size-3.5" /> {p.level}
-                  </li>
-                  <li class="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1">
-                    <Icon name="clock" class="size-3.5" /> {p.time}
-                  </li>
-                  <li class="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1">
-                    <Icon name="bolt" class="size-3.5" /> {p.type}
-                  </li>
-                </ul>
-                <p class="text-sm text-darkblue/80">{p.description}</p>
-
-                <details class="group mt-4 rounded-xl bg-white">
-                  <summary class="flex min-h-11 items-center justify-between gap-2 px-4 py-2 text-sm font-semibold text-blue">
-                    O que inclui
-                    <Icon name="plus" class="details-icon size-4 transition-transform" />
-                  </summary>
-                  <ul class="space-y-3 px-4 pb-4 text-sm">
-                    {p.features.map((f) => (
-                      <li class:list={[f.highlight && 'rounded-lg bg-gold/15 p-3']}>
-                        <p class="font-semibold text-darkblue">{f.title}</p>
-                        <p class="text-darkblue/75">{f.description}</p>
-                      </li>
-                    ))}
-                  </ul>
-                </details>
-
-                <div class="mt-auto pt-5">
-                  <WhatsAppLink interest={p.name} class="btn-dark">
-                    Começar agora
-                  </WhatsAppLink>
-                </div>
-              </div>
-            </article>
-          </li>
-        ))
-      }
-    </ul>
-    <CarouselControls target="programas-lista" label="Programas" />
-    <p class="mt-2 text-center text-xs text-blue md:hidden" aria-hidden="true">Desliza para ver mais →</p>
+    <div class="hidden gap-3 md:flex" data-carousel-nav="programas-carousel">
+      <button
+        type="button"
+        data-dir="-1"
+        aria-controls="programas-carousel"
+        aria-label="Programa anterior"
+        class="inline-flex size-12 cursor-pointer items-center justify-center rounded-full border border-darkblue/15 text-darkblue transition hover:border-darkblue hover:bg-darkblue hover:text-white disabled:pointer-events-none disabled:opacity-30"
+      >
+        <Icon name="chevron-left" />
+      </button>
+      <button
+        type="button"
+        data-dir="1"
+        aria-controls="programas-carousel"
+        aria-label="Programa seguinte"
+        class="inline-flex size-12 cursor-pointer items-center justify-center rounded-full border border-darkblue/15 text-darkblue transition hover:border-darkblue hover:bg-darkblue hover:text-white disabled:pointer-events-none disabled:opacity-30"
+      >
+        <Icon name="chevron-right" />
+      </button>
+    </div>
   </div>
+
+  <ul id="programas-carousel" class="carousel mt-12" aria-label="Programas de treino" aria-roledescription="carrossel">
+    {
+      programs.map(({ id, data: p }, i) => (
+        <li
+          class="w-[82vw] max-w-[22rem] sm:w-[21rem]"
+          aria-roledescription="slide"
+          aria-label={`${i + 1} de ${programs.length}`}
+        >
+          <article
+            id={id}
+            class="group relative isolate flex aspect-[3/4.6] flex-col justify-end overflow-hidden rounded-3xl bg-darkblue text-white shadow-[0_25px_50px_-25px_rgb(31_47_63/0.6)]"
+          >
+            <Picture
+              src={p.image}
+              alt={p.imageAlt}
+              formats={['avif', 'webp']}
+              widths={[340, 520, 700]}
+              sizes="(min-width: 640px) 336px, 82vw"
+              quality={60}
+              loading="lazy"
+              decoding="async"
+              class="h-full w-full object-cover transition duration-700 ease-out-soft group-hover:scale-105"
+              pictureAttributes={{ class: 'absolute inset-0 -z-10 block' }}
+            />
+            <div class="absolute inset-0 -z-10 bg-gradient-to-t from-darkblue from-5% via-darkblue/70 via-35% to-darkblue/0 to-60%" />
+
+            {p.popular && (
+              <p class="absolute top-4 left-4 inline-flex items-center gap-1 rounded-full bg-gold px-3 py-1 text-xs font-bold text-ink">
+                <Icon name="star" class="size-3" /> Popular
+              </p>
+            )}
+
+            <div class="p-6">
+              <ul class="mb-3 flex flex-wrap gap-1.5 text-xs font-semibold">
+                <li class="rounded-full bg-white/15 px-2.5 py-1 backdrop-blur-sm">{p.level}</li>
+                <li class="rounded-full bg-white/15 px-2.5 py-1 backdrop-blur-sm">{p.time}</li>
+                <li class="rounded-full bg-white/15 px-2.5 py-1 backdrop-blur-sm">{p.type}</li>
+              </ul>
+              <h3 class="text-2xl font-extrabold">{p.name}</h3>
+              <p class="mt-1 text-sm font-semibold text-gold">
+                {p.gender} • {p.duration}
+              </p>
+              <p class="mt-3 line-clamp-2 text-[0.95rem] text-white/85">{p.description}</p>
+
+              <div class="mt-5 grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  commandfor={`dlg-${id}`}
+                  command="show-modal"
+                  class="btn min-h-11 border border-white/30 px-3 text-sm text-white hover:bg-white/10"
+                >
+                  Ver detalhes
+                </button>
+                <WhatsAppLink interest={p.name} class="btn-gold min-h-11 px-3 text-sm">
+                  Começar
+                </WhatsAppLink>
+              </div>
+            </div>
+          </article>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="mt-2 flex justify-center" data-carousel-dots="programas-carousel">
+    {
+      programs.map(({ data: p }, i) => (
+        <button
+          type="button"
+          data-index={i}
+          aria-label={`Ir para ${p.name}`}
+          aria-controls="programas-carousel"
+          aria-current={i === 0 ? 'true' : 'false'}
+          class="group inline-flex h-8 min-w-8 cursor-pointer items-center justify-center"
+        >
+          <span class="block h-2.5 w-2.5 rounded-full bg-darkblue/20 transition-all duration-300 group-aria-[current=true]:w-8 group-aria-[current=true]:bg-gold" />
+        </button>
+      ))
+    }
+  </div>
+
+  {/* Detalhes de cada programa: conteúdo no HTML (indexável), mostrado num <dialog>. */}
+  {
+    programs.map(({ id, data: p }) => (
+      <dialog id={`dlg-${id}`} class="modal" aria-labelledby={`dlg-${id}-title`}>
+        <div class="relative">
+          <Picture
+            src={p.image}
+            alt=""
+            formats={['avif', 'webp']}
+            width={640}
+            height={300}
+            fit="cover"
+            quality={60}
+            loading="lazy"
+            decoding="async"
+            class="h-40 w-full object-cover sm:h-48"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-darkblue/90 to-transparent" />
+          <button
+            type="button"
+            commandfor={`dlg-${id}`}
+            command="close"
+            class="absolute top-3 right-3 inline-flex size-10 cursor-pointer items-center justify-center rounded-full bg-white/90 text-darkblue hover:bg-white"
+            aria-label="Fechar"
+          >
+            <Icon name="close" />
+          </button>
+          <h3 id={`dlg-${id}-title`} class="absolute bottom-4 left-6 text-2xl font-extrabold text-white">
+            {p.name}
+          </h3>
+        </div>
+        <div class="p-6 sm:p-8">
+          <ul class="flex flex-wrap gap-2 text-xs font-semibold text-blue">
+            <li class="inline-flex items-center gap-1 rounded-full bg-beige px-3 py-1.5">
+              <Icon name="user" class="size-3.5" /> {p.level}
+            </li>
+            <li class="inline-flex items-center gap-1 rounded-full bg-beige px-3 py-1.5">
+              <Icon name="clock" class="size-3.5" /> {p.time}
+            </li>
+            <li class="inline-flex items-center gap-1 rounded-full bg-beige px-3 py-1.5">
+              <Icon name="bolt" class="size-3.5" /> {p.type}
+            </li>
+            <li class="inline-flex items-center gap-1 rounded-full bg-beige px-3 py-1.5">
+              <Icon name="calendar" class="size-3.5" /> {p.duration} · {p.gender}
+            </li>
+          </ul>
+          <p class="mt-5 text-darkblue/80">{p.description}</p>
+
+          <h4 class="mt-7 text-sm font-bold tracking-wider text-gold-dark uppercase">O que inclui</h4>
+          <ul class="mt-4 space-y-4">
+            {p.features.map((f) => (
+              <li class:list={['flex gap-3', f.highlight && 'rounded-2xl bg-gold/15 p-4']}>
+                <span class="mt-0.5 inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-darkblue text-gold">
+                  <Icon name={f.highlight ? 'star' : 'check'} class="size-3.5" />
+                </span>
+                <span>
+                  <span class="block font-semibold">{f.title}</span>
+                  <span class="block text-[0.95rem] text-darkblue/70">{f.description}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+
+          <WhatsAppLink interest={p.name} class="btn-dark mt-8 w-full">
+            <Icon name="whatsapp" /> Quero este programa
+          </WhatsAppLink>
+        </div>
+      </dialog>
+    ))
+  }
 </section>
+
+<script>
+  // Fallback para browsers sem Invoker Commands (commandfor/command) nativo.
+  if (!('command' in HTMLButtonElement.prototype)) {
+    document.addEventListener('click', (event) => {
+      const button = (event.target as Element).closest<HTMLButtonElement>('button[commandfor]');
+      if (!button) return;
+      const dialog = document.getElementById(button.getAttribute('commandfor')!) as HTMLDialogElement | null;
+      if (!dialog) return;
+      if (button.getAttribute('command') === 'show-modal') dialog.showModal();
+      else if (button.getAttribute('command') === 'close') dialog.close();
+    });
+  }
+
+  // Fechar diálogos ao clicar no backdrop.
+  for (const dialog of document.querySelectorAll<HTMLDialogElement>('dialog.modal')) {
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+  }
+
+  // Carrossel: setas + indicadores. O slide ativo vem de um IntersectionObserver
+  // (sem ler geometria no arranque → sem layout forçado).
+  for (const row of document.querySelectorAll<HTMLElement>('.carousel')) {
+    const slides = [...row.children] as HTMLElement[];
+    const dots = [...document.querySelectorAll<HTMLButtonElement>(`[data-carousel-dots="${row.id}"] button`)];
+    const nav = document.querySelector<HTMLElement>(`[data-carousel-nav="${row.id}"]`);
+    const [prev, next] = nav ? [...nav.querySelectorAll<HTMLButtonElement>('button')] : [];
+    const visible = new Set<number>();
+
+    const goTo = (index: number) => {
+      const slide = slides[Math.max(0, Math.min(index, slides.length - 1))];
+      row.scrollTo({ left: slide.offsetLeft - parseFloat(getComputedStyle(row).paddingLeft) });
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const index = slides.indexOf(entry.target as HTMLElement);
+          if (entry.isIntersecting) visible.add(index);
+          else visible.delete(index);
+        }
+        if (!visible.size) return;
+        const first = Math.min(...visible);
+        const last = Math.max(...visible);
+        dots.forEach((dot, i) => dot.setAttribute('aria-current', String(i === first)));
+        if (prev) prev.disabled = first === 0;
+        if (next) next.disabled = last === slides.length - 1;
+      },
+      { root: row, threshold: 0.75 },
+    );
+    slides.forEach((slide) => observer.observe(slide));
+
+    dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i)));
+    nav?.addEventListener('click', (event) => {
+      const button = (event.target as Element).closest<HTMLButtonElement>('button[data-dir]');
+      if (!button) return;
+      const current = visible.size ? Math.min(...visible) : 0;
+      goTo(current + Number(button.dataset.dir));
+    });
+  }
+</script>
