@@ -20,12 +20,12 @@ const plans = (await getCollection('plans')).sort((a, b) => a.data.order - b.dat
       <p class="section-lead">Escolhe o teu compromisso!</p>
     </div>
 
-    <ul class="mt-14 grid items-center gap-6 lg:mt-20 lg:grid-cols-3 lg:gap-5">
+    <ul class="mt-14 grid gap-8 lg:mt-20 lg:grid-cols-3 lg:items-stretch lg:gap-5">
       {
         plans.map(({ data: plan }) => (
           <li
             class:list={[
-              'reveal relative flex h-full flex-col rounded-3xl p-7 sm:p-9',
+              'reveal relative flex flex-col rounded-3xl p-7 pb-8 sm:p-9',
               plan.popular
                 ? 'order-first bg-gradient-to-b from-blue to-darkblue text-white shadow-[0_30px_60px_-20px_rgb(31_47_63/0.6)] ring-2 ring-gold lg:order-none lg:-my-6 lg:py-12'
                 : 'bg-white shadow-[0_20px_50px_-30px_rgb(31_47_63/0.35)] ring-1 ring-darkblue/5',
@@ -47,9 +47,9 @@ const plans = (await getCollection('plans')).sort((a, b) => a.data.order - b.dat
               {plan.tagline}
             </p>
 
-            <div class:list={['my-7 h-px', plan.popular ? 'bg-white/15' : 'bg-darkblue/10']} />
+            <div class:list={['my-7 h-px shrink-0', plan.popular ? 'bg-white/20' : 'bg-darkblue/10']} />
 
-            <ul class="mb-9 flex-1 space-y-3.5 text-[0.95rem]">
+            <ul class="mb-8 flex-1 space-y-3.5 text-[0.95rem]">
               {plan.includesPrevious && <li class="font-semibold">{plan.includesPrevious}</li>}
               {plan.benefits.map((benefit) => (
                 <li class="flex items-start gap-3">
@@ -75,7 +75,7 @@ const plans = (await getCollection('plans')).sort((a, b) => a.data.order - b.dat
               ))}
             </ul>
 
-            <WhatsAppLink interest={plan.name} class={plan.popular ? 'btn-gold w-full' : 'btn-dark w-full'}>
+            <WhatsAppLink interest={plan.name} class={plan.popular ? 'btn-gold mt-auto w-full shrink-0' : 'btn-dark mt-auto w-full shrink-0'}>
               Junta-te agora
               <Icon name="arrow-right" class="size-4" />
             </WhatsAppLink>
