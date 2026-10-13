@@ -1,24 +1,20 @@
 // Import nomeado: o bundler só inclui este campo no script do cliente.
 import { whatsapp } from '../content/site.json';
 
-/** Mensagem genérica (usada no href de fallback, sem JS). */
-export const DEFAULT_MESSAGE = 'Olá Nelson! Gostaria de saber mais sobre o acompanhamento.';
-
 /**
- * Constrói a mensagem pré-preenchida do WhatsApp.
- * Mantém o formato do site anterior: nome + programa/plano de interesse.
+ * Mensagem pré-preenchida do WhatsApp: curta, informal (como se escreve no WhatsApp)
+ * e com o essencial para o Nelson responder logo — nome e programa/plano de interesse.
  */
-export function buildMessage(name: string, interest?: string): string {
-  const lines = ['Olá, Nelson!', ''];
-  lines.push(
-    name
-      ? `O meu nome é ${name} e gostaria de ter a orientação de um profissional para atingir os meus objetivos.`
-      : 'Gostaria de ter a orientação de um profissional para atingir os meus objetivos.',
-  );
-  if (interest) lines.push('', `Tenho interesse no ${interest}.`);
-  lines.push('', 'Como posso começar?', '', 'Obrigado!');
+export function buildMessage(name?: string, interest?: string): string {
+  const intro = name ? `Chamo-me ${name} e gostava` : 'Gostava';
+  const lines = ['Olá Nelson! 👋', `${intro} de começar a treinar contigo.`];
+  if (interest) lines.push(`Tenho interesse no ${interest}.`, 'Podes explicar-me como funciona?');
+  else lines.push('Podes explicar-me como funciona o acompanhamento?');
   return lines.join('\n');
 }
+
+/** Mensagem genérica (usada no href de fallback, sem JS). */
+export const DEFAULT_MESSAGE = buildMessage();
 
 export function buildWhatsAppUrl(message: string = DEFAULT_MESSAGE): string {
   return `https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}`;
