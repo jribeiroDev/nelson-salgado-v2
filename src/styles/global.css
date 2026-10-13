@@ -140,19 +140,39 @@
   @apply bg-beige/85 text-darkblue shadow-[0_1px_0_rgb(31_47_63/0.08)] backdrop-blur-md;
 }
 
-/* ---------- Carrossel de programas ---------- */
+/* ---------- Carrossel de programas (modo centrado) ---------- */
 .carousel {
-  @apply flex snap-x snap-mandatory gap-5 overflow-x-auto pt-2 pb-12 sm:gap-6;
+  --slide-w: min(82vw, 22rem);
+  @apply flex snap-x snap-mandatory gap-5 overflow-x-auto pt-4 pb-12 sm:gap-6;
   scrollbar-width: none;
   overscroll-behavior-x: contain;
-  scroll-padding-inline: max(1rem, calc((100vw - 80rem) / 2 + 2rem));
-  padding-inline: max(1rem, calc((100vw - 80rem) / 2 + 2rem));
+  /* Meia largura de padding de cada lado: qualquer slide (incluindo o 1.º e o último)
+     pode ficar exatamente ao centro. */
+  padding-inline: calc(50% - var(--slide-w) / 2);
+}
+@media (min-width: 40rem) {
+  .carousel {
+    --slide-w: 21rem;
+  }
 }
 .carousel::-webkit-scrollbar {
   display: none;
 }
 .carousel > * {
-  @apply shrink-0 snap-start;
+  @apply w-(--slide-w) shrink-0 snap-center;
+  transition:
+    scale 0.5s var(--ease-out-soft),
+    opacity 0.5s var(--ease-out-soft);
+}
+/* No desktop, os vizinhos ficam mais pequenos e esbatidos; o central ganha destaque. */
+@media (min-width: 48rem) {
+  .carousel > :not([data-active]) {
+    scale: 0.9;
+    opacity: 0.55;
+  }
+  .carousel > :not([data-active]):hover {
+    opacity: 0.8;
+  }
 }
 
 /* ---------- Marquee de testemunhos ---------- */

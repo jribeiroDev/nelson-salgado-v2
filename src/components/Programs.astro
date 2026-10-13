@@ -40,7 +40,7 @@ const programs = (await getCollection('programs')).sort((a, b) => a.data.order -
     {
       programs.map(({ id, data: p }, i) => (
         <li
-          class="w-[82vw] max-w-[22rem] sm:w-[21rem]"
+          data-active={i === 0 ? '' : undefined}
           aria-roledescription="slide"
           aria-label={`${i + 1} de ${programs.length}`}
         >
@@ -210,54 +210,69 @@ const programs = (await getCollection('programs')).sort((a, b) => a.data.order -
     });
   }
 
-  // Carrossel: setas + indicadores. Os slides visíveis vêm de um IntersectionObserver
-  // (sem ler geometria no arranque → sem layout forçado).
-  const smooth = matchMedia('(prefers-reduced-motion: no-preference)').matches ? 'smooth' : 'instant';
+  // Carrossel centrado: o slide ativo é o que está no centro. Detetado por um
+  // IntersectionObserver com uma faixa estreita no meio (sem ler geometria no arranque).
+  const smooth = (matchMedia('(prefers-reduced-motion: no-preference)').matches ? 'smooth' : 'instant') as ScrollBehavior;
+  const desktop = matchMedia('(min-width: 48rem)');
 
   for (const row of document.querySelectorAll<HTMLElement>('.carousel')) {
     const slides = [...row.children] as HTMLElement[];
     const dots = [...document.querySelectorAll<HTMLButtonElement>(`[data-carousel-dots="${row.id}"] button`)];
     const nav = document.querySelector<HTMLElement>(`[data-carousel-nav="${row.id}"]`);
     const [prev, next] = nav ? [...nav.querySelectorAll<HTMLButtonElement>('button')] : [];
-    const visible = new Set<number>();
+    let active = 0;
 
-    // Alinha o slide `index` ao início do carrossel. Perto do fim o browser limita ao
-    // scroll máximo, o que mostra os últimos slides por inteiro.
-    const goTo = (index: number) => {
+    // Centra o slide `index` (o padding do carrossel permite centrar até o 1.º e o último).
+    const goTo = (index: number, behavior: ScrollBehavior = smooth) => {
       const slide = slides[Math.max(0, Math.min(index, slides.length - 1))];
-      row.scrollTo({ left: slide.offsetLeft - slides[0].offsetLeft, behavior: smooth as ScrollBehavior });
+      row.scrollTo({ left: slide.offsetLeft - slides[0].offsetLeft, behavior });
     };
 
-    const observer = new IntersectionObserver(
+    const setActive = (index: number) => {
+      active = index;
+      slides.forEach((slide, i) => slide.toggleAttribute('data-active', i === index));
+      dots.forEach((dot, i) => {
+        dot.toggleAttribute('data-visible', i === index);
+        dot.setAttribute('aria-current', String(i === index));
+      });
+      if (prev) prev.disabled = index === 0;
+      if (next) next.disabled = index === slides.length - 1;
+    };
+
+    const centerObserver = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          const index = slides.indexOf(entry.target as HTMLElement);
-          if (entry.isIntersecting) visible.add(index);
-          else visible.delete(index);
+          if (entry.isIntersecting) setActive(slides.indexOf(entry.target as HTMLElement));
         }
-        if (!visible.size) return;
-        const first = Math.min(...visible);
-        const last = Math.max(...visible);
-        // Destaca todos os slides visíveis (no desktop cabem 3–4), para se ver que se chegou ao fim.
-        dots.forEach((dot, i) => {
-          dot.toggleAttribute('data-visible', visible.has(i));
-          dot.setAttribute('aria-current', String(i === first));
-        });
-        if (prev) prev.disabled = first === 0;
-        if (next) next.disabled = last === slides.length - 1;
       },
-      { root: row, threshold: 0.75 },
+      { root: row, rootMargin: '0px -49% 0px -49%' },
     );
-    slides.forEach((slide) => observer.observe(slide));
+    slides.forEach((slide) => centerObserver.observe(slide));
+
+    // No desktop começa no programa do meio (com cartões de ambos os lados). O salto é
+    // feito antes de a secção entrar no ecrã, por isso não se vê.
+    if (desktop.matches) {
+      new IntersectionObserver(
+        ([entry], observer) => {
+          if (!entry.isIntersecting) return;
+          goTo(Math.floor(slides.length / 2), 'instant');
+          observer.disconnect();
+        },
+        { rootMargin: '800px 0px' },
+      ).observe(row);
+    }
 
     dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i)));
-    // As setas avançam uma "página": o próximo slide escondido passa a ser o primeiro.
     nav?.addEventListener('click', (event) => {
       const button = (event.target as Element).closest<HTMLButtonElement>('button[data-dir]');
-      if (!button || !visible.size) return;
-      const first = Math.min(...visible);
-      const last = Math.max(...visible);
-      goTo(button.dataset.dir === '1' ? last + 1 : first - visible.size);
+      if (button) goTo(active + Number(button.dataset.dir));
+    });
+    // Clicar num cartão lateral (fora dos botões) traz esse cartão para o centro.
+    row.addEventListener('click', (event) => {
+      const target = event.target as Element;
+      if (target.closest('a, button')) return;
+      const slide = target.closest<HTMLElement>('.carousel > *');
+      if (slide && !slide.hasAttribute('data-active')) goTo(slides.indexOf(slide));
     });
   }
 </script>
