@@ -1,6 +1,6 @@
 # nelson-salgado.pt
 
-Landing page do personal trainer Nelson Salgado. É um site estático feito com **Astro 7** e **Tailwind CSS 4**, alojado na **Cloudflare** (Workers com static assets).
+Landing page do personal trainer Nelson Salgado. É um site estático feito com **Astro 7** e **Tailwind CSS 4**, preparado para alojamento na **Vercel**.
 
 - Todo o conteúdo vem no HTML (ótimo para SEO), incluindo os detalhes dos programas, que abrem num `<dialog>` nativo. Não há framework JS: só ~3 KB de scripts inline (diálogo do WhatsApp, header e carrossel).
 - A fonte é a **Plus Jakarta Sans** variável, self-hosted (1 ficheiro de 27 KB com preload). O Astro gera um fallback com métricas ajustadas.
@@ -12,15 +12,12 @@ Landing page do personal trainer Nelson Salgado. É um site estático feito com 
 
 | Comando           | O que faz                                       |
 | ----------------- | ----------------------------------------------- |
-| `npm install`     | Instala as dependências                         |
+| `npm ci`          | Instala as versões do lockfile (Node.js 22)      |
 | `npm run dev`     | Servidor de desenvolvimento em `localhost:4321` |
 | `npm run build`   | Gera o site em `dist/`                          |
 | `npm run preview` | Serve o `dist/` localmente                      |
 | `npm run check`   | Valida os tipos e os schemas dos conteúdos      |
 | `npm run assets`  | Gera de novo os ícones PNG e o `og-image.jpg`   |
-| `npm run cf:dev`  | Serve o `dist/` com o runtime da Cloudflare (testa `_headers`, 404) em `127.0.0.1:8788` |
-| `npm run cf:deploy` | Build + deploy manual para produção com Wrangler |
-| `npm run cf:deploy:preview` | Build + upload de uma versão de pré-visualização (não afeta produção) |
 
 ## Editar conteúdos
 
@@ -48,59 +45,59 @@ src/
 ├─ lib/whatsapp.ts     # mensagens/links do WhatsApp
 ├─ styles/global.css   # Tailwind + tokens da marca
 └─ pages/              # index.astro e 404.astro
-public/                # robots.txt, _headers, ícones, og-image.jpg
+public/                # robots.txt, ícones, og-image.jpg
+vercel.json            # build e headers de cache/segurança na Vercel
 ```
 
-## Deploy na Cloudflare (Workers com static assets)
+## Deploy na Vercel
 
-O site é publicado como um **Worker só com ficheiros estáticos** (o modelo que a Cloudflare recomenda para sites novos, sucessor do Pages). Não há código de servidor: o Worker serve o conteúdo de `dist/`.
+O site é publicado como ficheiros estáticos a partir de `dist/`. Não precisa de adaptador `@astrojs/vercel`, funções de servidor ou variáveis de ambiente. Ver a [documentação de Astro na Vercel](https://vercel.com/docs/frameworks/frontend/astro).
 
 ### Deploy automático via Git
 
-O Worker está ligado ao repositório GitHub `jribeiroDev/nelson-salgado-v2` (Workers Builds): **cada push para `master` faz build e deploy em produção**.
+1. Na Vercel, escolher **Add New → Project** e importar `jribeiroDev/nelson-salgado-v2`.
+2. Confirmar os valores abaixo e publicar com **Deploy**. O `vercel.json` define o preset, os comandos de instalação/build e a pasta de saída; o `package.json` fixa o Node.js 22.
+3. Em **Settings → Git**, confirmar `master` como branch de produção. Depois de ligado, cada push para essa branch publica em produção; outras branches e pull requests geram previews.
 
-| Campo (painel → Worker → Settings → Build) | Valor |
+| Campo | Valor |
 | --- | --- |
 | Branch de produção | `master` |
+| Root Directory | raiz do repositório (`./`) |
+| Framework Preset | `Astro` |
+| Install Command | `npm ci` |
 | Build command | `npm run build` |
-| Deploy command | `npx wrangler deploy` |
-| Node | lido de `.node-version` (22) |
+| Output Directory | `dist` |
+| Node.js Version | `22.x` |
 
-O `wrangler.jsonc` define o Worker:
+O `vercel.json` preserva os headers de segurança e cache do site. Os ficheiros com hash em `/_astro/*` ficam em cache durante um ano; o HTML revalida. `cleanUrls` remove a extensão `.html` dos endereços. O `dist/404.html`, gerado pelo Astro, é a página para endereços inexistentes (status 404).
 
-- `name`: tem de ser **igual ao nome do Worker no painel** (`nelson-salgado-v2`)
-- `assets.directory: ./dist`: a pasta gerada pelo build
-- `not_found_handling: 404-page`: endereços inexistentes mostram `404.html` com status 404
-- `public/_headers`: headers de cache e segurança, aplicados pela Cloudflare
-
-Para testar localmente com o mesmo runtime: `npm run build && npm run cf:dev` (abre em `http://127.0.0.1:8788`).
+Para validar localmente: `npm run check`, `npm run build` e `npm run preview`. O preview do Astro serve o site, mas os headers definidos em `vercel.json` devem ser confirmados num deployment da Vercel.
 
 ### Deploy manual (alternativa)
 
 ```bash
-npx wrangler login
+npx vercel
 ```
 
 ```bash
-npm run cf:deploy
+npx vercel --prod
 ```
 
-`npm run cf:deploy:preview` publica uma versão de pré-visualização (URL próprio) sem mexer em produção.
+No primeiro comando, iniciar sessão e ligar ao projeto da Vercel. `npx vercel` cria um preview; `npx vercel --prod` publica em produção.
 
 ### Domínio
 
-1. No Worker → **Settings → Domains & Routes → Add → Custom domain**: adicionar `nelson-salgado.pt` e `www.nelson-salgado.pt` (o DNS do domínio tem de estar na Cloudflare, ou criar os CNAME indicados).
-2. **Redirect `www` → domínio principal** (canónico): *Rules → Redirect Rules → Create*
-   - Quando: `Hostname equals www.nelson-salgado.pt`
-   - Então: Dynamic redirect `concat("https://nelson-salgado.pt", http.request.uri.path)`, código **301**, manter a query string.
-3. Em *Speed → Optimization*, deixar o **Rocket Loader desligado**: injeta JS e não traz benefício aqui.
+1. Em **Settings → Domains**, adicionar `nelson-salgado.pt` e `www.nelson-salgado.pt`.
+2. Configurar `www.nelson-salgado.pt` para redirecionar permanentemente para `https://nelson-salgado.pt`, mantendo o caminho e a query string.
+3. No fornecedor de DNS, aplicar os registos indicados pela Vercel. Se o DNS continuar na Cloudflare, remover as rotas/custom domains do Worker antigo que intercetem estes endereços e usar os registos indicados pela Vercel com proxy desligado (**DNS only**).
+4. Confirmar HTTPS, a página inicial e um endereço inexistente antes de desativar o alojamento antigo. Desligar também o build automático do Worker para evitar novos deploys na Cloudflare.
 
-Os ficheiros com hash em `/_astro/*` (imagens, fonte) ficam em cache para sempre; o HTML revalida em cada deploy, por isso as alterações aparecem logo.
+O domínio canónico continua definido como `https://nelson-salgado.pt` em `astro.config.mjs` (SEO, partilhas e sitemap).
 
 ## Depois de publicar (SEO)
 
-- [ ] Retirar o site antigo do Vercel, ou pôr `nelson-salgado.vercel.app` a fazer redirect 301 para `https://nelson-salgado.pt`, para evitar conteúdo duplicado.
-- [ ] Desligar o *Attack Challenge Mode* / bot protection do Vercel enquanto o domínio lá estiver: devolve 429 a crawlers e a pré-visualizações de partilha.
+- [ ] Confirmar o redirecionamento de `www` para o domínio principal e o status 404 para endereços inexistentes.
+- [ ] Confirmar que as definições de proteção da Vercel permitem o acesso público à produção e aos crawlers/pré-visualizações de partilha.
 - [ ] Google Search Console: verificar o domínio e submeter `https://nelson-salgado.pt/sitemap-index.xml`.
 - [ ] Bing Webmaster Tools: importar a partir do Search Console.
 - [ ] Validar os dados estruturados em <https://search.google.com/test/rich-results> e <https://validator.schema.org>.

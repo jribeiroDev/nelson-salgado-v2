@@ -25,3 +25,6 @@ Thumbs.db
 # wrangler
 .wrangler/
 .dev.vars*
+
+# Vercel
+.vercel/
