@@ -16,13 +16,6 @@
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 
-  --animate-marquee: marquee var(--marquee-duration, 60s) linear infinite;
-
-  @keyframes marquee {
-    to {
-      translate: -50% 0;
-    }
-  }
 }
 
 @layer base {
@@ -180,23 +173,22 @@
   mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
 }
 .marquee-track {
-  @apply flex w-max animate-marquee;
+  @apply flex w-max;
+  animation: marquee var(--marquee-duration, 60s) linear infinite;
 }
-.marquee:hover .marquee-track,
-.marquee:focus-within .marquee-track {
-  animation-play-state: paused;
-}
-@media (prefers-reduced-motion: reduce) {
-  /* Sem movimento: vira uma lista deslizável e esconde a cópia duplicada. */
-  .marquee {
-    @apply overflow-x-auto;
-    mask-image: none;
+@keyframes marquee {
+  from {
+    translate: 0 0;
   }
+  to {
+    translate: -50% 0;
+  }
+}
+/* Esta faixa mantém o movimento mesmo com a preferência global de movimento reduzido. */
+@layer base {
   .marquee-track {
-    animation: none;
-  }
-  .marquee-track [aria-hidden='true'] {
-    display: none;
+    animation-duration: var(--marquee-duration, 60s) !important;
+    animation-iteration-count: infinite !important;
   }
 }
 

@@ -4,7 +4,7 @@ Landing page do personal trainer Nelson Salgado. É um site estático feito com 
 
 - Todo o conteúdo vem no HTML (ótimo para SEO), incluindo os detalhes dos programas, que abrem num `<dialog>` nativo. Não há framework JS: só ~3 KB de scripts inline (diálogo do WhatsApp, header e carrossel).
 - A fonte é a **Plus Jakarta Sans** variável, self-hosted (1 ficheiro de 27 KB com preload). O Astro gera um fallback com métricas ajustadas.
-- Testemunhos em marquee só com CSS: pausa ao passar o rato e, com "reduzir movimento" ativo, fica parado e deslizável.
+- Testemunhos em movimento automático e infinito, repetindo os cartões sem saltos e sem botão. Esta secção mantém a animação mesmo com "reduzir movimento" ativo.
 - As imagens saem em AVIF/WebP responsivo, geradas no build. O CSS vai inline, por isso não há pedidos bloqueantes.
 - Lighthouse (local): desktop 100/100/100/100; mobile 92–100 em performance (mediana ~99) e 100 nas restantes. Peso total ≈ 120 KB.
 
